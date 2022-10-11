@@ -1,0 +1,7 @@
+HOST = ''
+CLIENT = ''
+USER = ''
+PASSWORD = ''
+DATABASE = ''
+SECRET = ''
+PORT = ''
