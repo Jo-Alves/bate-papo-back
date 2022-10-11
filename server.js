@@ -8,6 +8,7 @@ const http = require("http")
 
 const loginRouter = require("./app/routes/login-router")
 const userRouter = require("./app/routes/user-router")
+const contactRouter = require("./app/routes/contact-router")
 const messageRouter = require("./app/routes/message-router")
 
 const app = express()
@@ -28,6 +29,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 app.use("/", loginRouter)
+app.use("/contact", contactRouter)
 app.use("/user", userRouter)
 app.use("/message", messageRouter)
 const port = process.env.PORT || 3000 
