@@ -12,21 +12,23 @@ const contactRouter = require("./app/routes/contact-router")
 const messageRouter = require("./app/routes/message-router")
 
 const app = express()
+app.use(cors())
+app.use(express.static(__dirname))
+app.use(express.json())
+app.use(express.urlencoded({extended: false}))
+
 const server = http.createServer(app)
 const io = socketio(server, {
     cors: "*"
 })
 
-io.on("connection", socket => {
-    console.log("conectado")
-
-    io.emit("test", `Meu id é ${socket.id}`)
-})
-
-app.use(cors())
-app.use(express.static(__dirname))
-app.use(express.json())
-app.use(express.urlencoded({extended: false}))
+io.on('connection', function(socket) {
+    // console.log(socket.id)
+    socket.on('SEND_MESSAGE', function(data) {
+        console.log(data)
+        io.emit('MESSAGE', data)
+    });
+});
 
 app.use("/", loginRouter)
 app.use("/contact", contactRouter)

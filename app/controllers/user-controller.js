@@ -29,21 +29,26 @@ const User = {
         res.json(users.data)
     },
     login: async (req, res) => {
+        const error = { email: "", password: "" }
         const { email, password } = req.body
         user_model._email = email
         user_model._password = password
 
-        const users =  await user_model.findByEmail()
-        console.log(users)
+        const users = await user_model.findByEmail()
+
         if (users.error) {
             return res.status(500).send({ error: "Ops... Houve um erro no servidor. Tente novamente mais tarde" })
         }
-        else if (!users.emailExits)
-            return res.status(406).json({ error: "Email não encontrado" })
+        else if (!users.emailExits) {
+            error.email = "Email não encontrado"
+            return res.status(406).json({ error })
+        }
 
         const isPassword = await bcrypt.compare(password, users.data.password)
-        if (!isPassword)
-            return res.status(406).json({ error: "A senha está incorreta." })
+        if (!isPassword) {
+            error.password = "A senha está incorreta."
+            return res.status(406).json({ error })
+        }
 
         payload = {
             id: users.data.id,
